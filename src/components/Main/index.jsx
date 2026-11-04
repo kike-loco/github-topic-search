@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react'
 import LazyLoad from 'react-lazy-load'
-import { Spring } from 'react-spring'
 import { Item, Info, Paginator } from '../'
 import { connect } from 'react-redux'
 import { getTopicsFromApi, insertText } from '../../actions'
@@ -56,29 +55,24 @@ export class Main extends Component {
         border="default"
         borderRadius={5}
         style={{ minWidth: '350px' }}>
-        <Spring
-          from={{ opacity: this.state.readyBackground ? 1 : 0 }}
-          to={{ opacity: this.state.readyBackground ? 1 : 0 }}
-          config={{ delay: 3000, precision: 0.5, duration: 300 }}>
-          {props => (
-            <LazyLoad
-              onContentVisible={event =>
-                this.setState(
-                  { readyBackground: true },
-                  console.log(
-                    '%c loaded-background ✔️',
-                    'background-color: green;color:white'
-                  )
-                )
-              }>
-              <Background
-                style={{ opacity: props.opacity }}
-                src="https://loremflickr.com/1280/720/mexico"
-                alt="mexico"
-              />
-            </LazyLoad>
-          )}
-        </Spring>
+        <LazyLoad
+          onContentVisible={() =>
+            this.setState({ readyBackground: true }, () =>
+              console.log(
+                '%c loaded-background ✔️',
+                'background-color: green;color:white'
+              )
+            )
+          }>
+          <Background
+            style={{
+              opacity: this.state.readyBackground ? 1 : 0,
+              transition: 'opacity 300ms ease'
+            }}
+            src="https://loremflickr.com/1280/720/mexico"
+            alt="mexico"
+          />
+        </LazyLoad>
 
         <Heading
           fontWeight={1000}
